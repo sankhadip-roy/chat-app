@@ -16,11 +16,8 @@ const io = new Server(server, {
 
 io.on("connection", (socket) => {
     console.log(`User connected ${socket.id}`);
-
-    // Handle 'send_message' event
     socket.on('send_message', (data) => {
-        console.log(`Received message: ${data.message}`);
-        // Broadcast the message to all connected clients
+        console.log("Data:", data);
         io.emit('recive_message', data);
     });
 
