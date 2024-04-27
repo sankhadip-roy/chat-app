@@ -2,6 +2,7 @@ const express = require('express')
 const http = require("http");
 const cors = require('cors');
 const { Server } = require("socket.io");
+const { log } = require('console');
 
 const app = express();
 app.use(cors());
@@ -14,8 +15,13 @@ const io = new Server(server, {
     },
 });
 
+const onlineUsers = new Set()
+
 io.on("connection", (socket) => {
     console.log(`User connected ${socket.id}`);
+    onlineUsers.add(socket.id);
+    const userList = Array.from(onlineUsers);
+    io.emit('online-users', userList);
     socket.on('send_message', (data) => {
         console.log("Data:", data);
         io.emit('recive_message', data);
@@ -23,6 +29,9 @@ io.on("connection", (socket) => {
 
     socket.on('disconnect', () => {
         console.log('User disconnected');
+        onlineUsers.delete(socket.id);
+        const usersList = Array.from(onlineUsers);
+        io.emit('online-users', usersList);
     });
 });
 
