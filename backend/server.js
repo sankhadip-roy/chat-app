@@ -3,9 +3,15 @@ const http = require("http");
 const cors = require('cors');
 const { Server } = require("socket.io");
 const { log } = require('console');
+const EmployeeModel = require("./model/Employee")
+
+const mongoose = require("mongoose")
 
 const app = express();
+app.use(express.json())
 app.use(cors());
+
+mongoose.connect("mongodb+srv://sankhadiproy23:nqou7frIgFrXYJ71@cluster0.czznsuk.mongodb.net/?retryWrites=true&w=majority");
 
 const server = http.createServer(app);
 const io = new Server(server, {
@@ -34,6 +40,28 @@ io.on("connection", (socket) => {
         io.emit('online-users', usersList);
     });
 });
+
+app.post("/login", (req, res) => {
+    const { email, password } = req.body;
+    EmployeeModel.findOne({ email: email })
+        .then(user => {
+            if (user) {
+                if (user.password === password) {
+                    res.json("Success")
+                } else {
+                    res.json("The password is incorrect")
+                }
+            } else {
+                res.json("No record existed")
+            }
+        })
+})
+
+app.post("/register", (req, res) => {
+    EmployeeModel.create(req.body)
+        .then(employees => res.json(employees))
+        .catch(err => res.json(err))
+})
 
 server.listen(3001, () => {
     console.log(`Example app listening on port 3001`);
