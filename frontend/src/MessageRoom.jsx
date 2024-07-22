@@ -16,14 +16,21 @@ function App() {
     const [onlineUsers, setOnlineUsers] = useState([]);
 
     const loggedUser = useRecoilValue(userloggedin);
-    const [username, setusername] = useState(loggedUser); //used to set atom value initially then if the user want to change the name he/she can
+    const [username, setusername] = useState('anonymous'); //used to set atom value initially then if the user want to change the name he/she can
 
 
     const sendMessage = () => {
         if (username && msg) {
             const createdTime = Date.now();
+            let usernameCondition = ""
+            if (loggedUser != 'anonymous-not-loggedin') {
+                usernameCondition = loggedUser
+            }
+            else {
+                usernameCondition = username + ' (not loggedin)'
+            }
             socket.emit('send_message', {
-                username: username,
+                username: usernameCondition,
                 message: msg,
                 createdTime: createdTime
             });
@@ -56,16 +63,20 @@ function App() {
     return (
         <>
             <div>
+                {loggedUser == 'anonymous-not-loggedin' ? (
+                    <div>
+                        &nbsp;&nbsp; <a href="http://localhost:5173/register">Register</a> &nbsp;&nbsp;
+                        <a href="http://localhost:5173/login">Login</a>
+                    </div>
+                ) : (
+                    <div>&nbsp; &nbsp; User logged in as : {loggedUser}</div>
+                )}
 
-                <div>
-                    &nbsp;&nbsp; <a href="http://localhost:5173/register">Register</a> &nbsp;&nbsp;
-                    <a href="http://localhost:5173/login">Login</a>
-                </div>
 
                 <div className=" flex">
 
                     <div className="p-3 w-72">
-                        <h3 className="font-bold pb-2">Online Users Socket Id</h3>
+                        <h3 className="font-bold pb-2">Online Users Socket Id [{onlineUsers.length}]</h3>
                         <div className="rounded-md  overflow-y-auto max-h-64" style={{
                             border: '1px solid black',
                             padding: '10px'
@@ -81,10 +92,19 @@ function App() {
 
                     <div className='p-3 w-72'>
                         <h3 className="font-bold p-2">Send Your Message</h3>
-                        <p>User: {loggedUser}</p>
-                        <div className="p-2">
-                            <Input label="Set custom username" value={username} onChange={(e) => setusername(e.target.value)} />
-                        </div>
+
+                        {loggedUser == 'anonymous-not-loggedin' ? (
+                            <div>
+                                <div>&nbsp; Message without signing in</div>
+                                <div className="p-2">
+                                    <Input label="Set custom username" value={username} onChange={(e) => setusername(e.target.value)} />
+                                </div>
+                            </div>
+                        ) : (
+                            <div>&nbsp; User logged in as : {loggedUser}</div>
+                        )}
+
+
                         <div className="p-2">
                             <Input label='Message' value={msg} onChange={(e) => setmsg(e.target.value)} />
                         </div>

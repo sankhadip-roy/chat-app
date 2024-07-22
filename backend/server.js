@@ -3,7 +3,7 @@ const http = require("http");
 const cors = require('cors');
 const { Server } = require("socket.io");
 const { log } = require('console');
-const EmployeeModel = require("./model/Employee")
+const userModel = require("./model/userDb")
 
 const mongoose = require("mongoose")
 
@@ -43,7 +43,7 @@ io.on("connection", (socket) => {
 
 app.post("/login", (req, res) => {
     const { email, password } = req.body;
-    EmployeeModel.findOne({ email: email })
+    userModel.findOne({ email: email })
         .then(user => {
             if (user) {
                 if (user.password === password) {
@@ -58,8 +58,8 @@ app.post("/login", (req, res) => {
 })
 
 app.post("/register", (req, res) => {
-    EmployeeModel.create(req.body)
-        .then(employees => res.json(employees))
+    userModel.create(req.body)
+        .then(users => res.json(users))
         .catch(err => res.json(err))
 })
 

@@ -14,7 +14,7 @@ function Login() {
     const [email, setEmail] = useState()
     const [password, setPassword] = useState()
 
-    const [user, setUser] = useRecoilState(userloggedin) //*
+    const [user, setUser] = useRecoilState(userloggedin)
 
 
     const navigate = useNavigate()
@@ -23,12 +23,12 @@ function Login() {
         e.preventDefault()
         axios.post("http://localhost:3001/login", { email, password })
             .then(result => {
-                console.log(result)
+                // console.log(result)
                 if (result.data.stat === "Success") {
                     setUser(result.data.user)
                     navigate("/")
-                    console.log(user)
-                    alert('login successful: ' + user)
+                    // console.log(user);
+                    alert('login successful: ' + result.data.user) //using result.data.user instead of user because useRecoilState is a asyncronous function taking time in updating the user variable
                 } else {
                     navigate("/register")
                     alert("You are not registered to this service")
@@ -72,7 +72,7 @@ function Login() {
 
                         />
                     </div>
-                    <button onClick={() => setUser(email)} type="submit" className="btn btn-success w-100 rounded-0">
+                    <button type="submit" className="btn btn-success w-100 rounded-0">
                         Login
                     </button>
                 </form>

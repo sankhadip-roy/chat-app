@@ -2,12 +2,6 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import axios from 'axios'
 import { useNavigate } from "react-router-dom";
-import {
-    useRecoilState,
-    useRecoilValue,
-} from 'recoil';
-
-import { userloggedin } from './atom/userAtom'
 
 function Signup() {
 
@@ -15,8 +9,6 @@ function Signup() {
     const [email, setEmail] = useState()
     const [password, setPassword] = useState()
     const navigate = useNavigate()
-
-    const user = useRecoilValue(userloggedin)
 
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -32,7 +24,7 @@ function Signup() {
     return (
         <div className="d-flex justify-content-center align-items-center bg-secondary vh-100">
             <div className="bg-white p-3 rounded w-25">
-                <h2><center>Sign Up {user}</center></h2>
+                <h2><center>Sign Up</center></h2>
 
                 <form onSubmit={handleSubmit}>
                     <div className="mb-3">
