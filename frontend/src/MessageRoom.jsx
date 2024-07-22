@@ -1,16 +1,23 @@
 import { io } from "socket.io-client";
 import { useState, useEffect } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import './App.css'
 import { Button, Input } from "@material-tailwind/react";
+import './App.css'
+
+//recoil related import
+import { useRecoilValue } from 'recoil';
+import { userloggedin } from './atom/userAtom'
 
 const socket = io.connect("http://localhost:3001");
 
 function App() {
-    const [username, setusername] = useState('');
     const [msg, setmsg] = useState('');
     const [data_rcv, setdata_rcv] = useState([]);
-    const [onlineUsers, setOnlineUsers] = useState([])
+    const [onlineUsers, setOnlineUsers] = useState([]);
+
+    const loggedUser = useRecoilValue(userloggedin);
+    const [username, setusername] = useState(loggedUser); //used to set atom value initially then if the user want to change the name he/she can
+
 
     const sendMessage = () => {
         if (username && msg) {
@@ -73,9 +80,10 @@ function App() {
                     </div>
 
                     <div className='p-3 w-72'>
-                        <h3 className="font-bold p-2">Send your Message</h3>
+                        <h3 className="font-bold p-2">Send Your Message</h3>
+                        <p>User: {loggedUser}</p>
                         <div className="p-2">
-                            <Input label="Username" value={username} onChange={(e) => setusername(e.target.value)} />
+                            <Input label="Set custom username" value={username} onChange={(e) => setusername(e.target.value)} />
                         </div>
                         <div className="p-2">
                             <Input label='Message' value={msg} onChange={(e) => setmsg(e.target.value)} />

@@ -3,10 +3,20 @@ import { Link } from "react-router-dom";
 import axios from 'axios'
 import { useNavigate } from "react-router-dom";
 
+import { useRecoilState } from 'recoil';
+
+import { userloggedin } from './atom/userAtom'
+
+
+
 function Login() {
 
     const [email, setEmail] = useState()
     const [password, setPassword] = useState()
+
+    const [user, setUser] = useRecoilState(userloggedin) //*
+
+
     const navigate = useNavigate()
 
     const handleSubmit = (e) => {
@@ -14,8 +24,11 @@ function Login() {
         axios.post("http://localhost:3001/login", { email, password })
             .then(result => {
                 console.log(result)
-                if (result.data === "Success") {
+                if (result.data.stat === "Success") {
+                    setUser(result.data.user)
                     navigate("/")
+                    console.log(user)
+                    alert('login successful: ' + user)
                 } else {
                     navigate("/register")
                     alert("You are not registered to this service")
@@ -30,6 +43,7 @@ function Login() {
     return (
         <div className="d-flex justify-content-center align-items-center bg-secondary vh-100">
             <div className="bg-white p-3 rounded w-25">
+                <h1>now : {user}</h1>
                 <h2><center>Login</center></h2>
                 <form onSubmit={handleSubmit}>
 
@@ -58,7 +72,7 @@ function Login() {
 
                         />
                     </div>
-                    <button type="submit" className="btn btn-success w-100 rounded-0">
+                    <button onClick={() => setUser(email)} type="submit" className="btn btn-success w-100 rounded-0">
                         Login
                     </button>
                 </form>
