@@ -9,7 +9,7 @@ import { userloggedin } from '../atom/userAtom'
 
 
 
-function Login() {
+export default function Login() {
 
     const [email, setEmail] = useState()
     const [password, setPassword] = useState()
@@ -84,6 +84,4 @@ function Login() {
             </div>
         </div>
     );
-}
-
-export default Login;
+};

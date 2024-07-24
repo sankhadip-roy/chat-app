@@ -4,16 +4,17 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import { Button, Input } from "@material-tailwind/react";
 import '.././App.css'
 
+import OnlineUsers from "./OnlineUsers";
+
 //recoil related import
 import { useRecoilValue } from 'recoil';
 import { userloggedin } from '../atom/userAtom'
 
 const socket = io.connect("http://localhost:3001");
 
-function App() {
+export default function App() {
     const [msg, setmsg] = useState('');
     const [data_rcv, setdata_rcv] = useState([]);
-    const [onlineUsers, setOnlineUsers] = useState([]);
 
     const loggedUser = useRecoilValue(userloggedin);
     const [username, setusername] = useState('anonymous'); //used to set atom value initially then if the user want to change the name he/she can
@@ -22,12 +23,12 @@ function App() {
     const sendMessage = () => {
         if (username && msg) {
             const createdTime = Date.now();
-            let usernameCondition = ""
+            let usernameCondition = "";
             if (loggedUser != 'anonymous-not-loggedin') {
-                usernameCondition = loggedUser
+                usernameCondition = loggedUser;
             }
             else {
-                usernameCondition = username + ' (not loggedin)'
+                usernameCondition = username + ' (not loggedin)';
             }
             socket.emit('send_message', {
                 username: usernameCondition,
@@ -37,14 +38,6 @@ function App() {
             setmsg('');
         }
     }
-    useEffect(() => {
-        socket.on("online-users", (data) => {
-            setOnlineUsers(data);
-        });
-        return () => {
-            socket.off("online-users");
-        };
-    }, []);
 
     useEffect(() => {
         socket.on("recive_message", (data) => {
@@ -74,20 +67,8 @@ function App() {
 
 
                 <div className=" flex">
-
-                    <div className="p-3 w-72">
-                        <h3 className="font-bold pb-2">Online Users Socket Id [{onlineUsers.length}]</h3>
-                        <div className="rounded-md  overflow-y-auto max-h-64" style={{
-                            border: '1px solid black',
-                            padding: '10px'
-                        }}>
-                            {onlineUsers.map((user, index) => (
-                                <div key={index} className="">
-                                    {index + 1}.&nbsp;
-                                    <span >{user}</span>
-                                </div>
-                            ))}
-                        </div>
+                    <div>
+                        <OnlineUsers />
                     </div>
 
                     <div className='p-3 w-72'>
@@ -135,6 +116,4 @@ function App() {
             </div>
         </>
     )
-}
-
-export default App;
+};
