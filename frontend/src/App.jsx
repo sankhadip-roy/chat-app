@@ -2,9 +2,9 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import './App.css'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
-import Signup from './Signup'
-import Login from './Login'
-import MessageRoom from "./MessageRoom"
+import Signup from './components/Signup'
+import Login from './components/Login'
+import MessageRoom from "./components/MessageRoom"
 
 
 function App() {

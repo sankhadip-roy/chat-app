@@ -2,11 +2,11 @@ import { io } from "socket.io-client";
 import { useState, useEffect } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { Button, Input } from "@material-tailwind/react";
-import './App.css'
+import '.././App.css'
 
 //recoil related import
 import { useRecoilValue } from 'recoil';
-import { userloggedin } from './atom/userAtom'
+import { userloggedin } from '../atom/userAtom'
 
 const socket = io.connect("http://localhost:3001");
 
