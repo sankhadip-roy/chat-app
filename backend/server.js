@@ -1,11 +1,10 @@
-const express = require('express')
 const http = require("http");
 const cors = require('cors');
+const express = require('express')
+const mongoose = require("mongoose")
 const { Server } = require("socket.io");
-const { log } = require('console');
 const userModel = require("./model/userDb")
 
-const mongoose = require("mongoose")
 
 const app = express();
 app.use(express.json())
@@ -15,28 +14,40 @@ mongoose.connect("mongodb+srv://sankhadiproy23:nqou7frIgFrXYJ71@cluster0.czznsuk
 
 const server = http.createServer(app);
 const io = new Server(server, {
+    pingTimeout: 60000,
     cors: {
-        origin: 'http://localhost:5173',
+        origin: (origin, callback) => {
+            const allowedOrigins = [
+                'https://0dab-2405-201-8011-60aa-b7c8-583e-3cf9-4ba2.ngrok-free.app',
+                'http://localhost:5173'
+            ];
+            if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+                callback(null, true);
+            } else {
+                callback(new Error('Not allowed by CORS'));
+            }
+        },
+
         methods: ['GET', 'POST'],
     },
 });
 
-const onlineUsers = new Set()
+const onlineUsers = new Set();
 
 io.on("connection", (socket) => {
-    console.log(`User connected ${socket.id}`);
     onlineUsers.add(socket.id);
-    const userList = Array.from(onlineUsers);
-    io.emit('online-users', userList);
+    const usersList = Array.from(onlineUsers);
+    console.log(`✔ ${socket.id} :` + usersList); //log
+    io.emit('online-users', usersList);
     socket.on('send_message', (data) => {
-        console.log("Data:", data);
+        // console.log("Data:", data); //log
         io.emit('recive_message', data);
     });
 
     socket.on('disconnect', () => {
-        console.log('User disconnected');
         onlineUsers.delete(socket.id);
         const usersList = Array.from(onlineUsers);
+        console.log(`✘ ${socket.id} :` + usersList) //log
         io.emit('online-users', usersList);
     });
 });
@@ -63,6 +74,4 @@ app.post("/register", (req, res) => {
         .catch(err => res.json(err))
 })
 
-server.listen(3001, () => {
-    console.log(`Example app listening on port 3001`);
-});
+server.listen(3001, () => console.log('Server is running on port 3001'));
