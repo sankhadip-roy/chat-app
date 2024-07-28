@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import axios from 'axios'
 import { useNavigate } from "react-router-dom";
@@ -9,7 +9,7 @@ import { userloggedin } from '../atom/userAtom'
 
 
 
-export default function Login() {
+const Login = React.memo(() => {
 
     const [email, setEmail] = useState()
     const [password, setPassword] = useState()
@@ -25,7 +25,7 @@ export default function Login() {
             .then(result => {
                 // console.log(result)
                 if (result.data.stat === "Success") {
-                    setUser(result.data.user)
+                    setUser(result.data.user);
                     navigate("/")
                     // console.log(user);
                     alert('login successful: ' + result.data.user) //using result.data.user instead of user because useRecoilState is a asyncronous function taking time in updating the user variable
@@ -84,4 +84,5 @@ export default function Login() {
             </div>
         </div>
     );
-};
+});
+export default Login;

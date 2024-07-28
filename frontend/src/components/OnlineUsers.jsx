@@ -1,8 +1,8 @@
 import { io } from "socket.io-client";
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 const socket = io.connect("http://localhost:3001");
 
-export default function OnlineUsers() {
+const OnlineUsers = React.memo(() => {
     const [onlineUsers, setOnlineUsers] = useState([]);
 
     useEffect(() => {
@@ -14,6 +14,15 @@ export default function OnlineUsers() {
         };
     }, []);
 
+    const memoizedUsers = useMemo(() => {
+        return onlineUsers.map((user, index) => (
+            <div key={index} className="">
+                {index + 1}.&nbsp;
+                <span>{user}</span>
+            </div>
+        ));
+    }, [onlineUsers]);
+
     return (
         <>
             <div className="p-3 w-72">
@@ -22,14 +31,11 @@ export default function OnlineUsers() {
                     border: '1px solid black',
                     padding: '10px'
                 }}>
-                    {onlineUsers.map((user, index) => (
-                        <div key={index} className="">
-                            {index + 1}.&nbsp;
-                            <span >{user}</span>
-                        </div>
-                    ))}
+                    {memoizedUsers}
                 </div>
             </div>
         </>
     )
-};
+});
+
+export default OnlineUsers;

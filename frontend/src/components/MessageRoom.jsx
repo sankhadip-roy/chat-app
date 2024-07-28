@@ -1,5 +1,5 @@
 import { io } from "socket.io-client";
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { Button, Input } from "@material-tailwind/react";
 import '.././App.css'
@@ -20,7 +20,7 @@ export default function App() {
     const [username, setusername] = useState('anonymous'); //used to set atom value initially then if the user want to change the name he/she can
 
 
-    const sendMessage = () => {
+    const sendMessage = useCallback(() => {
         if (username && msg) {
             const createdTime = Date.now();
             let usernameCondition = "";
@@ -37,7 +37,7 @@ export default function App() {
             });
             setmsg('');
         }
-    }
+    }, [msg, username, loggedUser]);
 
     useEffect(() => {
         socket.on("recive_message", (data) => {
