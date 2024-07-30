@@ -1,1 +1,1 @@
-chat-app: chat room where useres can chat with each other in real time
+chat-app: chat room where users can chat with each other in real time

@@ -22,6 +22,9 @@ export default function Login() {
                 // console.log(result) //log
                 if (result.data.stat === "Success") {
                     setUser(result.data.user);
+
+                    // localStorage.setItem('user', JSON.stringify(user)); // locally storing the logged in user
+
                     navigate("/")
                     // console.log(user); //log
                     alert('login successful: ' + result.data.user) //using result.data.user instead of user because useRecoilState is a asyncronous function taking time in updating the user variable

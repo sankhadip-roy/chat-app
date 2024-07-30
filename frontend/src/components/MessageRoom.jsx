@@ -60,8 +60,11 @@ export default function App() {
                 <div>
                     <NavbarSimple />
                 </div>
-                <div className="flex justify-around">
-                    <div>
+
+                {/* {JSON.parse(localStorage.getItem('user'))} */}
+
+                <div className="flex justify-evenly">
+                    <div className='p-3 w-72'>
                         <OnlineUsers />
                     </div>
 
@@ -87,23 +90,26 @@ export default function App() {
                             <Button onClick={sendMessage}>Send</Button>
                         </div>
                     </div>
-
                 </div>
 
                 <div className="p-5">
-                    <h3 className="font-bold  pb-2">Chat Room</h3>
+                    <h3 className="font-bold  pb-2">Messeges</h3>
                     <div className="rounded-md" style={{
                         border: '1px solid black',
                         padding: '10px'
                     }}>
-                        {data_rcv.map((msg, i) => (
-                            <div key={i}>
-                                {i + 1}.&nbsp;
-                                <span>[{formatDate(msg.createdTime)}]</span> &nbsp;
-                                <span>{msg.username}</span> : &nbsp;
-                                <span>{msg.message}</span>
-                            </div>
-                        ))}
+                        {
+                            data_rcv.length === 0 ? (<div>Fetching ... </div>)
+                                : (data_rcv.map((msg, i) => (
+                                    <div key={i}>
+                                        {i + 1}.&nbsp;
+                                        <span>[{formatDate(msg.createdTime)}]</span> &nbsp;
+                                        <span>{msg.username}</span> : &nbsp;
+                                        <span>{msg.message}</span>
+                                    </div>
+                                ))
+                                )
+                        }
                     </div>
                 </div>
 
