@@ -5,6 +5,7 @@ import { Button, Input } from "@material-tailwind/react";
 import '.././App.css'
 
 import OnlineUsers from "./OnlineUsers";
+import { NavbarSimple } from "./Navbar";
 
 //recoil related import
 import { useRecoilValue } from 'recoil';
@@ -56,17 +57,10 @@ export default function App() {
     return (
         <>
             <div>
-                {loggedUser == 'anonymous-not-loggedin' ? (
-                    <div>
-                        &nbsp;&nbsp; <a href="http://localhost:5173/register">Register</a> &nbsp;&nbsp;
-                        <a href="http://localhost:5173/login">Login</a>
-                    </div>
-                ) : (
-                    <div>&nbsp; &nbsp; User logged in as : {loggedUser}</div>
-                )}
-
-
-                <div className=" flex">
+                <div>
+                    <NavbarSimple />
+                </div>
+                <div className="flex justify-around">
                     <div>
                         <OnlineUsers />
                     </div>
@@ -82,7 +76,7 @@ export default function App() {
                                 </div>
                             </div>
                         ) : (
-                            <div>&nbsp; User logged in as : {loggedUser}</div>
+                            <div>&nbsp; username : {loggedUser}</div>
                         )}
 
 
