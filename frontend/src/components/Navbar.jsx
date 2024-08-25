@@ -37,7 +37,15 @@ function NavList() {
                 </Typography>
 
             </ul >
-        ) : (<div>&nbsp; &nbsp; User logged in as : {loggedUser}</div>)
+        ) : (
+            <Typography
+                as="li"
+                variant="small"
+                color="blue-gray"
+                className="p-1 font-medium"
+            >
+                <p>User logged in as : {loggedUser}</p>
+            </Typography>)
     );
 }
 

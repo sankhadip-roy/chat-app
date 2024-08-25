@@ -3,7 +3,7 @@ const cors = require('cors');
 const express = require('express')
 const mongoose = require("mongoose")
 const { Server } = require("socket.io");
-const userModel = require("./model/userDb")
+const User = require("./model/userModel")
 
 
 const app = express();
@@ -54,7 +54,7 @@ io.on("connection", (socket) => {
 
 app.post("/login", (req, res) => {
     const { email, password } = req.body;
-    userModel.findOne({ email: email })
+    User.findOne({ email: email })
         .then(user => {
             if (user) {
                 if (user.password === password) {
@@ -69,7 +69,7 @@ app.post("/login", (req, res) => {
 })
 
 app.post("/register", (req, res) => {
-    userModel.create(req.body)
+    User.create(req.body)
         .then(users => res.json(users))
         .catch(err => res.json(err))
 })
