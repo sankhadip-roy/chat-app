@@ -3,7 +3,7 @@ const cors = require('cors');
 const express = require('express')
 const mongoose = require("mongoose")
 const { Server } = require("socket.io");
-const User = require("./model/userModel")
+const userRoutes = require("./routes/userRoutes");
 
 
 const app = express();
@@ -61,26 +61,7 @@ io.on("connection", (socket) => {
     });
 });
 
-app.post("/login", (req, res) => {
-    const { email, password } = req.body;
-    User.findOne({ email: email })
-        .then(user => {
-            if (user) {
-                if (user.password === password) {
-                    res.json({ "stat": "Success", "user": user.name })
-                } else {
-                    res.json("The password is incorrect")
-                }
-            } else {
-                res.json("No record existed")
-            }
-        })
-})
+app.use("/", userRoutes);
 
-app.post("/register", (req, res) => {
-    User.create(req.body)
-        .then(users => res.json(users))
-        .catch(err => res.json(err))
-})
 
 server.listen(3001, () => console.log('Server is running on port 3001')); //will use env variable later
