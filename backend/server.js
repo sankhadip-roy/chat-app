@@ -10,7 +10,16 @@ const app = express();
 app.use(express.json())
 app.use(cors());
 
-mongoose.connect("mongodb+srv://sankhadiproy23:nqou7frIgFrXYJ71@cluster0.czznsuk.mongodb.net/?retryWrites=true&w=majority");
+const connectDb = async () => {
+    try {
+        mongoose.connect("mongodb+srv://sankhadiproy23:nqou7frIgFrXYJ71@cluster0.czznsuk.mongodb.net/?retryWrites=true&w=majority"); //will use env variable later
+        console.log("Database connected"); //log
+    }
+    catch (err) {
+        console.log("Database not connected", err); //log
+    }
+};
+connectDb();
 
 const server = http.createServer(app);
 const io = new Server(server, {
@@ -74,4 +83,4 @@ app.post("/register", (req, res) => {
         .catch(err => res.json(err))
 })
 
-server.listen(3001, () => console.log('Server is running on port 3001'));
+server.listen(3001, () => console.log('Server is running on port 3001')); //will use env variable later
