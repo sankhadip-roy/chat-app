@@ -2,85 +2,82 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from 'axios';
 import { useRecoilState } from 'recoil';
-
 import { userloggedin } from '../atom/userAtom';
 
-
 export default function Login() {
-
-    const [email, setEmail] = useState()
-    const [password, setPassword] = useState()
-
-    const [user, setUser] = useRecoilState(userloggedin)
-
-    const navigate = useNavigate()
+    const [name, setName] = useState("");
+    const [password, setPassword] = useState("");
+    const [user, setUser] = useRecoilState(userloggedin);
+    const navigate = useNavigate();
 
     const handleSubmit = (e) => {
-        e.preventDefault()
-        axios.post("http://localhost:3001/login", { email, password })
+        e.preventDefault();
+        axios.post("http://localhost:3001/login", { name, password })
             .then(result => {
-                // console.log(result) //log
                 if (result.data.stat === "Success") {
-                    setUser(result.data.user);
-
+                    // console.log(result); //log
+                    setUser(result.data.name);
                     // localStorage.setItem('user', JSON.stringify(user)); // locally storing the logged in user
-
-                    navigate("/")
-                    // console.log(user); //log
-                    alert('login successful: ' + result.data.user) //using result.data.user instead of user because useRecoilState is a asyncronous function taking time in updating the user variable
+                    navigate("/");
+                    alert('Login successful: ' + result.data.name); //using result.data.name instead of user because useRecoilState is a asyncronous function taking time in updating the user variable
                 } else {
-                    navigate("/register")
-                    alert("You are not registered to this service")
-
+                    alert("Invalid credentials. Please try again.");
                 }
-
             })
-            .catch(err => console.log(err))
+            .catch(err => {
+                console.error(err);
+                alert("An error occurred. Please try again.");
+            });
     }
 
-
     return (
-        <div className="d-flex justify-content-center align-items-center bg-secondary vh-100">
-            <div className="bg-white p-3 rounded w-25">
-                <h1>now : {user}</h1>
-                <h2><center>Login</center></h2>
+        <div className="flex items-center justify-center min-h-screen bg-gray-100">
+            <div className="px-8 py-6 mt-4 text-left bg-white shadow-lg rounded-lg">
+                <h3 className="text-2xl font-bold text-center text-gray-800">Login to your account</h3>
                 <form onSubmit={handleSubmit}>
-
-                    <div className="mb-3">
-                        <label htmlFor="email">
-                            <strong>Email</strong>
-                        </label>
-                        <input type="text"
-                            placeholder='Enter Email'
-                            autoComplete='off'
-                            name='email'
-                            className='form-control rounded-0'
-                            onChange={(e) => setEmail(e.target.value)}
-
-                        />
+                    <div className="mt-4">
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700" htmlFor="name">
+                                Username
+                            </label>
+                            <input
+                                type="text"
+                                placeholder="Enter Username"
+                                name="name"
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                                className="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600"
+                                required
+                            />
+                        </div>
+                        <div className="mt-4">
+                            <label className="block text-sm font-medium text-gray-700" htmlFor="password">
+                                Password
+                            </label>
+                            <input
+                                type="password"
+                                placeholder="Enter Password"
+                                name="password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                className="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600"
+                                required
+                            />
+                        </div>
+                        <div className="flex items-baseline justify-between">
+                            <button
+                                type="submit"
+                                className="px-6 py-2 mt-4 text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50"
+                            >
+                                Login
+                            </button>
+                            <Link to="/register" className="text-sm text-blue-600 hover:underline">
+                                Don't have an account?
+                            </Link>
+                        </div>
                     </div>
-                    <div className="mb-3">
-                        <label htmlFor="email">
-                            <strong>Password</strong>
-                        </label>
-                        <input type="password"
-                            placeholder='Enter Password'
-                            name='password'
-                            className='form-control rounded-0'
-                            onChange={(e) => setPassword(e.target.value)}
-
-                        />
-                    </div>
-                    <button type="submit" className="btn btn-success w-100 rounded-0">
-                        Login
-                    </button>
                 </form>
-                <p>Don't have an account?</p>
-                <Link to="/register" className="btn btn-default border w-100 bg-light rounded-0 text-decoration-none">
-                    Sign Up
-                </Link>
-
             </div>
         </div>
     );
-};
+}
