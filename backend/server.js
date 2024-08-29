@@ -12,7 +12,7 @@ app.use(cors());
 
 const connectDb = async () => {
     try {
-        mongoose.connect("mongodb+srv://sankhadiproy23:nqou7frIgFrXYJ71@cluster0.czznsuk.mongodb.net/?retryWrites=true&w=majority"); //will use env variable later
+        await mongoose.connect("mongodb+srv://sankhadiproy23:nqou7frIgFrXYJ71@cluster0.czznsuk.mongodb.net/?retryWrites=true&w=majority"); //will use env variable later
         console.log("Database connected"); //log
     }
     catch (err) {
@@ -46,7 +46,7 @@ const onlineUsers = new Set();
 io.on("connection", (socket) => {
     onlineUsers.add(socket.id);
     const usersList = Array.from(onlineUsers);
-    console.log(`✔ ${socket.id} :` + usersList); //log
+    // console.log(`✔ ${socket.id} :` + usersList); //log
     io.emit('online-users', usersList);
     socket.on('send_message', (data) => {
         // console.log("Data:", data); //log
@@ -56,7 +56,7 @@ io.on("connection", (socket) => {
     socket.on('disconnect', () => {
         onlineUsers.delete(socket.id);
         const usersList = Array.from(onlineUsers);
-        console.log(`✘ ${socket.id} :` + usersList) //log
+        // console.log(`✘ ${socket.id} :` + usersList) //log
         io.emit('online-users', usersList);
     });
 });

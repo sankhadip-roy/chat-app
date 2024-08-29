@@ -10,9 +10,9 @@ export default function Login() {
     const [user, setUser] = useRecoilState(userloggedin);
     const navigate = useNavigate();
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        axios.post("http://localhost:3001/login", { name, password })
+        await axios.post("http://localhost:3001/login", { name, password })
             .then(result => {
                 if (result.data.stat === "Success") {
                     // console.log(result); //log

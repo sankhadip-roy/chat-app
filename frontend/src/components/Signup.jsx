@@ -8,17 +8,20 @@ export default function Signup() {
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        axios.post("http://localhost:3001/register", { name, email, password })
+        const response = await axios.post("http://localhost:3001/register", { name, email, password })
             .then(result => {
                 console.log(result);
-                navigate("/login");
+                localStorage.setItem('userData', JSON.stringify(result.data));
+                // navigate("/login");
             })
             .catch(err => {
                 console.error(err);
                 alert("An error occurred. Please try again." + err);
             });
+        // localStorage.setItem('userData', JSON.stringify(response));
+
     }
 
     return (

@@ -14,7 +14,18 @@ function NavList() {
     const loggedUser = useRecoilValue(userloggedin);
     return (
         loggedUser == 'anonymous-not-loggedin' ? (
+
             < ul className="my-2 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6" >
+                <Typography
+                    as="li"
+                    variant="small"
+                    color="blue-gray"
+                    className="p-1 font-medium"
+                >
+                    <a href="http://localhost:5173/fetchusers" className="flex items-center hover:text-blue-500 transition-colors">
+                        Allusers
+                    </a>
+                </Typography>
                 <Typography
                     as="li"
                     variant="small"
